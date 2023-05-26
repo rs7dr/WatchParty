@@ -1,0 +1,17 @@
+{% load static %}
+{# Load the tag library #}
+{% load bootstrap5 %}
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+{% load socialaccount %}
+
+<div class="d-flex justify-content-center">
+    <h1 class="display-6 text-secondary">Successfully Logged Out</h1>
+</div> 
+
+<div class="d-flex justify-content-center">
+    <a href="{% provider_login_url 'google' %}">Login Again</a>
+</div> 

@@ -1,0 +1,278 @@
+{% load static %}
+{# Load the tag library #}
+{% load bootstrap5 %}
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+{% load socialaccount %}
+<!DOCTYPE html>
+<html style ="max-height: 600px;">
+    <head>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+      <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+      <link href="css/addons-pro/cards-extended.min.css" rel="stylesheet">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+
+    <body>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="#">Social Watch Party</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" aria-current="page" href="{% url 'index' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" href="{% url 'myBio' requester.username %}">My Bio</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'createEvent' %}">Create Event</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'events' %}">View Events</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'rsvps' %}">View RSVPs</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'friends' %}">Friend Suggestions</a>
+                </li>
+              </ul>
+            </div>
+                <li class="nav-item">
+                  <br>
+                  <form action="{% url 'searchResults' %}" method="get">
+                    <input type="text" name="search" placeholder="Search by title" value="{{request.GET.title}}">
+                    <input type="submit" value="Search">
+                  </form>
+                </li>
+              </div>
+                <div class="navbar-nav ms-auto">
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">
+                      <button class = "btn btn-info">Logout</button>
+                    </a>
+                  </li>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+
+        <style>
+          body{
+            margin-top:0px;
+            color: #0f8bdd;
+            text-align: left;
+            background-color: #0b9beeb4;    
+          }
+
+        .main-body {
+            padding: 15px;
+          }
+          input {
+      
+            border: 1px solid #209fda;
+      
+          }
+
+        .card {
+            box-shadow: 0 1px 3px 0 rgba(8, 8, 8, 0.829), 0 1px 2px 0 rgba(68, 156, 228, 0.774);
+          }
+        
+        .card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 0 solid rgba(0,0,0,.125);
+            border-radius: .25rem;
+            text-decoration: none;
+          }
+        
+        .card-body {
+            flex: 1 1 auto;
+            min-height: 1px;
+            padding: 1rem;
+          }
+
+        .mb-3, .my-3 {
+            margin-bottom: 1rem!important;
+          }
+        
+        .bg-gray-300 {
+            background-color: #e2e8f0;
+          }
+
+        .h-100 {
+            height: 100%!important;
+          }
+
+        li {
+          text-decoration: none;
+          list-style: none;
+        }
+        .img-max {
+           max-width: 300px;
+           width:100%;
+           max-height: 300px;
+           display: block;
+           margin-left: auto;
+           margin-right: auto;
+      }
+        p {
+          width: 300px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .title {
+       text-shadow: 1px 1px 0 #0f0f0f98, 3px 3px 0 #000000;
+       text-align: center;
+       font-size: 40px;
+       color: rgb(252, 248, 248);
+      }
+        </style>
+
+              <div class="row gutters-sm">
+                <div class="col-md-4 mb-3">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex flex-column align-items-center text-center">
+                        <div class="mt-3">
+                          <h4>{{user.username}}</h4>
+                          {% if user.myuser.hometown > 50 %}
+                            <p class="text-muted font-size-sm">{{"Lives in:"}} {{user.myuser.hometown}}</p>
+                          {% else %}
+                            <p class="text-muted font-size-sm">{{"Lives in:"}} {{user.myuser.hometown}}</p>
+                          {% endif %}
+                          {% csrf_token %}
+                          {% if editBio == False and friend_status == False %}
+                            <form method="get" action="#">
+                              <input type="submit" class="btn btn-success" name="Friend_Button" value="Add Friend">
+                            </form>
+                          {% elif editBio == False and friend_status == True %}
+                            <form method="get" action="#">
+                              <input type="submit" class="btn btn-danger" name="Remove_Friend_Button" value="Remove Friend">
+                            </form>
+                          {% else %}
+                            <a href="{% url 'editBio' %}" class="btn btn-info">Edit Bio</a>
+                            <br>
+                            <br>
+                          {% endif %}
+                          <h6>Friends: {{friends_list|length}}</h6>
+                          {% for friend in friends_list %}
+                            <a href="/myBio/{{ friend }}">
+                            <p>{{friend}}</p>
+                            </a>
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card mt-3">
+                    
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h6 class="mb-0">Username:</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                          <h6>{{user.username}}</h6>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h6 class="mb-0">Location:</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                          <p> {{user.myuser.hometown}}</p>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h6 class="mb-0">Occupation:</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                           {{user.myuser.title}}
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h6 class="mb-0">Profile Description:</h6>
+                          
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                          {{user.myuser.description}}
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h6 class="mb-0">Favorite Movies:</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                            {{movie_titles}}
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+              </div>
+            </div>
+        </div>
+        <h6 class="title">Favorite Movies:</h6>
+
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex flex-column align-items-center text-center">
+          {% for title, image, year, plot, movie_id in results %}
+          <div class="card" style="width: 350px;">
+            <br>
+            <img style="height: 200px; width: 130px; display: block;"  class="img-max" src="{{image}}" >
+            <div class="card-body">
+              <h5 class="card-title">{{title}}</h5>
+              <p class="card-text"> {{year}}</p>
+              <p class="card-text"> {{plot}}</p>
+              <p class="card-text"></p>
+              <br>
+              <a href="https://www.imdb.com/title/{{movie_id}}">View on IMDb</a> 
+           
+              {% if editBio %}
+              <form action="{% url 'remove_from_favorites' %}" method="get">
+                <input type="hidden" name="movie_id" value="{{movie_id}}">
+                <input type="submit" value="Remove From Favorite Movies">
+              {% endif %}
+            </form>
+            </div>
+          </div>
+          <br>
+      {% endfor %}
+    </div>
+    </body>
+</html>
